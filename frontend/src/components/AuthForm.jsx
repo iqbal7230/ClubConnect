@@ -3,7 +3,12 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/authcontext';
 
 export default function AuthForm({ type }) {
-  const [formData, setFormData] = useState({ name: '', email: '', password: '' });
+  const [formData, setFormData] = useState({ 
+    name: '', 
+    email: '', 
+    password: '', 
+    role: 'student'  // Default role
+  });
   const [error, setError] = useState('');
   const { login, register } = useAuth();
   const navigate = useNavigate();
@@ -14,7 +19,7 @@ export default function AuthForm({ type }) {
       if (type === 'login') {
         await login(formData.email, formData.password);
       } else {
-        await register(formData.name, formData.email, formData.password, 'student');
+        await register(formData.name, formData.email, formData.password, formData.role);
       }
       navigate('/dashboard');
     } catch (err) {
@@ -75,6 +80,48 @@ export default function AuthForm({ type }) {
               />
             </div>
           </div>
+
+          {/* Role Selection - Placed After Password */}
+          {type === 'register' && (
+            <div className="space-y-2">
+              <p className="text-sm font-medium text-gray-700">Register as:</p>
+              <div className="flex space-x-4">
+                <label className="flex items-center">
+                  <input
+                    type="radio"
+                    name="role"
+                    value="student"
+                    checked={formData.role === 'student'}
+                    onChange={(e) => setFormData({ ...formData, role: e.target.value })}
+                    className="h-4 w-4 text-indigo-600 focus:ring-indigo-500"
+                  />
+                  <span className="ml-2 text-sm text-gray-700">Student</span>
+                </label>
+                <label className="flex items-center">
+                  <input
+                    type="radio"
+                    name="role"
+                    value="admin"
+                    checked={formData.role === 'admin'}
+                    onChange={(e) => setFormData({ ...formData, role: e.target.value })}
+                    className="h-4 w-4 text-indigo-600 focus:ring-indigo-500"
+                  />
+                  <span className="ml-2 text-sm text-gray-700">Admin</span>
+                </label>
+                <label className="flex items-center">
+                  <input
+                    type="radio"
+                    name="role"
+                    value="sponsor"
+                    checked={formData.role === 'sponsor'}
+                    onChange={(e) => setFormData({ ...formData, role: e.target.value })}
+                    className="h-4 w-4 text-indigo-600 focus:ring-indigo-500"
+                  />
+                  <span className="ml-2 text-sm text-gray-700">Sponsor</span>
+                </label>
+              </div>
+            </div>
+          )}
 
           <div>
             <button
