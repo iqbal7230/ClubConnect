@@ -2,9 +2,7 @@ import express from 'express';
 import connectDB from './database/db.js';
 import cors from 'cors';
 import authRouter from './routes/authRoutes.js';
-
-
-import mongoose from 'mongoose';
+import eventRouter from './routes/eventRoutes.js';
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -20,6 +18,7 @@ app.use(express.json());
 
 // Routes
 app.use('/api/v1/auth', authRouter);
+app.use('/api/v1/events', eventRouter);
 
 // Error handling middleware
 // app.use(errorHandler);
