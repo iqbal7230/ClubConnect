@@ -1,16 +1,8 @@
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/authContext';
 import { useState } from 'react';
-import { HeartIcon, ChatBubbleOvalLeftIcon, ShareIcon, CurrencyDollarIcon, EllipsisHorizontalIcon, BookmarkIcon } from '@heroicons/react/24/outline';
-import { Calendar, momentLocalizer } from 'react-big-calendar';
-import moment from 'moment';
-import { toast } from 'react-toastify';
-import 'react-big-calendar/lib/css/react-big-calendar.css';
-import 'react-toastify/dist/ReactToastify.css';
-import SearchEvents from '../components/SearchEvents'; // Import the SearchEvents component
-
-// Initialize the localizer for react-big-calendar
-const localizer = momentLocalizer(moment);
+import { HeartIcon, ChatBubbleOvalLeftIcon, ShareIcon, CurrencyDollarIcon, EllipsisHorizontalIcon } from '@heroicons/react/24/outline';
+import SearchEvents from '../components/SearchEvents';
 
 const LandingPage = () => {
   const { currentUser, logout } = useAuth();
@@ -20,13 +12,12 @@ const LandingPage = () => {
     {
       id: 1,
       title: 'Tech Symposium 2024',
-      date: '2024-03-15T09:00:00',
       description: 'Join us for the biggest tech event of the year! 🚀',
       image: 'https://d2rvgzn8c26h0v.cloudfront.net/new-year-eve-kochi-ignite-241703145773518.webp',
       club: 'Tech Club',
       profileImage: 'https://images.pexels.com/photos/30763767/pexels-photo-30763767/free-photo-of-thoughtful-young-man-in-dramatic-lighting.jpeg?auto=compress&cs=tinysrgb&w=400&lazy=load',
       likes: 234,
-      comments: [], // Initialize comments as an empty array
+      comments: [],
       shares: 12,
       sponsors: 8,
       location: 'University Auditorium',
@@ -36,58 +27,32 @@ const LandingPage = () => {
     {
       id: 2,
       title: 'Cultural Fest',
-      date: '2024-03-20T09:00:00',
       description: 'Experience a vibrant celebration of diversity with food, music, and performances from around the world! 🌍🎉',
       image: 'https://images.pexels.com/photos/2263436/pexels-photo-2263436.jpeg?auto=compress&cs=tinysrgb&w=300',
       club: 'Cultural Society',
       profileImage: 'https://images.pexels.com/photos/30246594/pexels-photo-30246594/free-photo-of-elegant-woman-in-red-dress-by-ornate-doorway.jpeg?auto=compress&cs=tinysrgb&w=400&lazy=load',
       likes: 189,
-      comments: [], // Initialize comments as an empty array
+      comments: [],
       shares: 9,
       sponsors: 5,
       location: 'Main Campus Grounds',
       entry: 'free',
       performer: 'Jane Smith',
     },
-    // Add more posts as needed
   ]);
 
-  // State to manage filtered posts
   const [filteredPosts, setFilteredPosts] = useState(allPosts);
-
-  // State to manage saved events for the calendar
-  const [savedEvents, setSavedEvents] = useState([]);
-
-  // Function to handle "Add to Calendar"
-  const handleAddToCalendar = (post) => {
-    const newEvent = {
-      title: post.title,
-      start: new Date(post.date),
-      end: new Date(new Date(post.date).setHours(new Date(post.date).getHours() + 8)), // 8-hour event
-      description: post.description,
-      location: post.location,
-    };
-
-    // Add the event to the savedEvents array
-    setSavedEvents([...savedEvents, newEvent]);
-
-    // Show a toast notification
-    toast.success('Event saved to your calendar! 🗓️', {
-      position: 'top-right',
-      autoClose: 3000, // Close after 3 seconds
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-    });
-  };
 
   // Function to handle reactions
   const handleReaction = (postId, type) => {
     setFilteredPosts((prevPosts) =>
-      prevPosts.map((post) =>
-        post.id === postId ? { ...post, [type]: post[type] + 1 } : post
-      )
+      prevPosts.map((post) => {
+        if (post.id === postId) {
+          if (type === "comments") return post;
+          return { ...post, [type]: post[type] + 1 };
+        }
+        return post;
+      })
     );
   };
 
@@ -105,9 +70,7 @@ const LandingPage = () => {
   const handleAddComment = (postId, comment) => {
     setFilteredPosts((prevPosts) =>
       prevPosts.map((post) =>
-        post.id === postId
-          ? { ...post, comments: [...post.comments, comment] }
-          : post
+        post.id === postId ? { ...post, comments: [...post.comments, comment] } : post
       )
     );
   };
@@ -121,30 +84,18 @@ const LandingPage = () => {
             <Link to="/" className="text-2xl font-bold text-gray-900">
               CampusConnect
             </Link>
-
-            {/* Search Events Component */}
             <SearchEvents onSearch={handleSearch} />
-
             <div className="flex items-center space-x-4">
               {currentUser ? (
-                <button
-                  onClick={logout}
-                  className="px-4 py-2 text-gray-700 hover:text-indigo-600"
-                >
+                <button onClick={logout} className="px-4 py-2 text-gray-700 hover:text-indigo-600">
                   Logout
                 </button>
               ) : (
                 <>
-                  <Link
-                    to="/login"
-                    className="px-4 py-2 text-gray-700 hover:text-indigo-600"
-                  >
+                  <Link to="/login" className="px-4 py-2 text-gray-700 hover:text-indigo-600">
                     Sign In
                   </Link>
-                  <Link
-                    to="/register"
-                    className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700"
-                  >
+                  <Link to="/register" className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700">
                     Sign Up
                   </Link>
                 </>
@@ -156,19 +107,14 @@ const LandingPage = () => {
 
       {/* Main Content */}
       <main className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Posts Feed */}
         <div className="space-y-6">
           {filteredPosts.map((post) => (
             <div key={post.id} className="bg-white rounded-lg shadow-md overflow-hidden">
-              {/* Post Header (Profile at the Top) */}
+              {/* Post Header */}
               <div className="flex items-center justify-between p-4 border-b">
                 <div className="flex items-center space-x-3">
                   <Link to={`/profile/${post.id}`}>
-                    <img
-                      src={post.profileImage}
-                      alt={post.club}
-                      className="w-10 h-10 rounded-full object-cover cursor-pointer hover:opacity-80"
-                    />
+                    <img src={post.profileImage} alt={post.club} className="w-10 h-10 rounded-full object-cover" />
                   </Link>
                   <div>
                     <h3 className="font-semibold">{post.club}</h3>
@@ -181,76 +127,31 @@ const LandingPage = () => {
               </div>
 
               {/* Event Image */}
-              <img
-                src={post.image}
-                alt={post.title}
-                className="w-full h-64 object-cover"
-              />
+              <img src={post.image} alt={post.title} className="w-full h-64 object-cover" />
 
               {/* Interaction Buttons */}
               <div className="p-4 space-y-2">
                 <div className="flex items-center justify-between">
-                  {/* Like Button */}
-                  <button
-                    onClick={() => handleReaction(post.id, 'likes')}
-                    className="flex items-center space-x-2 text-gray-700 hover:text-red-500"
-                  >
+                  <button onClick={() => handleReaction(post.id, 'likes')} className="flex items-center space-x-2 text-gray-700 hover:text-red-500">
                     <HeartIcon className="h-6 w-6" />
                     <span>{post.likes}</span>
                   </button>
 
-                  {/* Comment Button */}
-                  <button
-                    onClick={() => handleReaction(post.id, 'comments')}
-                    className="flex items-center space-x-2 text-gray-700 hover:text-blue-500"
-                  >
+                  <button className="flex items-center space-x-2 text-gray-700 hover:text-blue-500">
                     <ChatBubbleOvalLeftIcon className="h-6 w-6" />
                     <span>{post.comments.length}</span>
                   </button>
 
-                  {/* Share Button */}
-                  <button
-                    onClick={() => handleReaction(post.id, 'shares')}
-                    className="flex items-center space-x-2 text-gray-700 hover:text-green-500"
-                  >
+                  <button onClick={() => handleReaction(post.id, 'shares')} className="flex items-center space-x-2 text-gray-700 hover:text-green-500">
                     <ShareIcon className="h-6 w-6" />
                     <span>{post.shares}</span>
                   </button>
 
-                  {/* Sponsor Button */}
-                  <Link
-                    to={`/profile/${post.id}`} // Navigate to president's profile
-                    className="flex items-center space-x-2 text-gray-700 hover:text-purple-500"
-                  >
+                  <Link to={`/profile/${post.id}`} className="flex items-center space-x-2 text-gray-700 hover:text-purple-500">
                     <CurrencyDollarIcon className="h-6 w-6" />
                     <span>{post.sponsors}</span>
                   </Link>
                 </div>
-
-                {/* Event Details */}
-                <div className="space-y-1">
-                  <p className="font-semibold">
-                    {post.club}: {post.description}
-                  </p>
-                  <p className="text-gray-600">
-                    {new Date(post.date).toLocaleDateString('en-US', {
-                      weekday: 'long',
-                      month: 'short',
-                      day: 'numeric',
-                    })}
-                  </p>
-                  <p className="text-gray-600">Venue: {post.location}</p>
-                  <p className="text-gray-600">Performer: {post.performer}</p>
-                  <p className="text-gray-600">Entry: {post.entry === 'paid' ? 'Paid' : 'Free'}</p>
-                </div>
-
-                {/* Add to Calendar Button */}
-                <button
-                  onClick={() => handleAddToCalendar(post)}
-                  className="text-gray-700 hover:text-gray-900 ml-auto flex items-center space-x-2"
-                >
-                  <BookmarkIcon className="h-7 w-7" /> Add to Calendar
-                </button>
 
                 {/* Comment Section */}
                 <div className="mt-4">
@@ -258,49 +159,26 @@ const LandingPage = () => {
                   <div className="space-y-2">
                     {post.comments.map((comment, index) => (
                       <div key={index} className="flex items-start space-x-2">
-                        <img
-                          src={post.profileImage}
-                          alt="User"
-                          className="w-6 h-6 rounded-full object-cover"
-                        />
+                        <img src={post.profileImage} alt="User" className="w-6 h-6 rounded-full object-cover" />
                         <div className="bg-gray-100 p-2 rounded-lg">
                           <p className="text-sm">{comment}</p>
                         </div>
                       </div>
                     ))}
                   </div>
-                  <div className="mt-4">
-                    <input
-                      type="text"
-                      placeholder="Add a comment..."
-                      className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter' && e.target.value.trim()) {
-                          handleAddComment(post.id, e.target.value.trim());
-                          e.target.value = '';
-                        }
-                      }}
-                    />
-                  </div>
+                  <input type="text" placeholder="Add a comment..." className="w-full px-3 py-2 border rounded-md"
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' && e.target.value.trim()) {
+                        handleAddComment(post.id, e.target.value.trim());
+                        e.target.value = '';
+                      }
+                    }} />
                 </div>
               </div>
             </div>
           ))}
         </div>
       </main>
-
-      {/* Inbuilt Calendar */}
-      <div className="fixed bottom-4 right-4 w-96 h-96 bg-white shadow-lg rounded-lg overflow-hidden">
-        <Calendar
-          localizer={localizer}
-          events={savedEvents}
-          startAccessor="start"
-          endAccessor="end"
-          defaultView="month"
-          views={['month', 'week', 'day']}
-          style={{ height: '100%' }}
-        />
-      </div>
     </div>
   );
 };

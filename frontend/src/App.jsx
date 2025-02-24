@@ -8,7 +8,7 @@ import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import './App.css';
 import ProfilePage from './pages/ProfilePage';
-import ChatRoom from './pages/ChatRoom';
+// import ChatRoom from './pages/ChatRoom';
 
 
 function App() {
