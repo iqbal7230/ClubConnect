@@ -9,6 +9,31 @@ import Dashboard from './pages/Dashboard';
 import './App.css';
 import ProfilePage from './pages/ProfilePage';
 import ChatRoom from './pages/ChatRoom';
+// import ProfilePage from './pages/ProfilePage';
+
+import UserProfile from "./components/UserProfile/UserProfile";
+
+const user = {
+  name: "John Doe",
+  tagline: "Tech Enthusiast | Traveler",
+  profilePicture: "https://via.placeholder.com/150",
+  coverPhoto: "https://via.placeholder.com/1200x300",
+  socialMedia: {
+    twitter: "#",
+    linkedin: "#",
+    instagram: "#",
+  },
+  email: "john.doe@example.com",
+  location: "New York, USA",
+  joinedDate: "March 2023",
+  role: "Student",
+  bio: "Passionate about technology and design. Love traveling and exploring new cultures.",
+  interests: ["Photography", "Coding", "Traveling"],
+  skills: ["JavaScript", "React", "UI/UX Design"],
+  eventsAttended: 12,
+  posts: 45,
+  badges: ["Top Contributor", "Event Organizer"],
+};
 
 
 function App() {
@@ -18,12 +43,16 @@ function App() {
         <Routes>
           {/* Public routes */}
           <Route path="/" element={<LandingPage/>} />
-          <Route path="/profile/:id" element={<ProfilePage />} />
+          {/* <Route path="/profile/:id" element={<ProfilePage />} /> */}
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/chat" element={<ChatRoom/>} />
          
           
+          <Route path="/profile" element={<UserProfile user={user} />} />
+          {/* need to set route of chat */}
+          
+
           {/* Private routes */}
           <Route
             path="/dashboard"
