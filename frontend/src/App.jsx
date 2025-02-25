@@ -8,7 +8,7 @@ import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import './App.css';
 import ProfilePage from './pages/ProfilePage';
-// import ChatRoom from './pages/ChatRoom';
+import ChatRoom from './pages/ChatRoom';
 
 
 function App() {
@@ -21,10 +21,9 @@ function App() {
           <Route path="/profile/:id" element={<ProfilePage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          {/* need to set route of chat */}
+          <Route path="/chat" element={<ChatRoom/>} />
+         
           
-
-
           {/* Private routes */}
           <Route
             path="/dashboard"
@@ -40,6 +39,8 @@ function App() {
         </Routes>
       </AuthProvider>
     </Router>
+    
+    
   );
 }
 

@@ -36,16 +36,15 @@ export const login = asyncHandler(async (req, res, next) => {
 
   // Check for user and validate password
   const user = await User.findOne({ email }).select('+password');
-  res.status(200).json({
-    success: true,
-    message: 'User signed in successfully'
-  });
+
   if (!user || !(await user.matchPassword(password))) {
     return next(new ErrorResponse('Invalid credentials', 401));
   }
 
-  sendTokenResponse(user, 200, res);
+  // ✅ Send response only if credentials are correct
+  return sendTokenResponse(user, 200, res);
 });
+
 
 // Generate JWT token
 const generateToken = (id) => {

@@ -2,7 +2,7 @@ import { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
 
 const AuthContext = createContext();
-
+const API_URL = 'http://localhost:3000/api/v1';
 export function useAuth() {
   return useContext(AuthContext);
 }
@@ -12,25 +12,53 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem('user'));
-    if (user) {
-      setCurrentUser(user);
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      setCurrentUser(JSON.parse(storedUser));
     }
     setLoading(false);
   }, []);
 
   const login = async (email, password) => {
-    const res = await axios.post(`${process.env.REACT_APP_API_URL}/auth/login`, { email, password });
-    localStorage.setItem('token', res.data.token);
-    localStorage.setItem('user', JSON.stringify(res.data.user));
-    setCurrentUser(res.data.user);
+    try {
+      if (!API_URL) {
+        throw new Error('API URL is not defined in environment variables');
+      }
+
+      const res = await axios.post(`${API_URL}/auth/login`, { email, password });
+
+      if (res.data.token && res.data.user) {
+        localStorage.setItem('token', res.data.token);
+        localStorage.setItem('user', JSON.stringify(res.data.user));
+        setCurrentUser(res.data.user);
+      } else {
+        throw new Error('Invalid login response from server');
+      }
+    } catch (err) {
+      console.error('Login failed:', err.response?.data?.msg || err.message);
+      throw err;
+    }
   };
 
   const register = async (name, email, password, role) => {
-    const res = await axios.post(`${process.env.REACT_APP_API_URL}/auth/register`, { name, email, password, role });
-    localStorage.setItem('token', res.data.token);
-    localStorage.setItem('user', JSON.stringify(res.data.user));
-    setCurrentUser(res.data.user);
+    try {
+      if (!API_URL) {
+        throw new Error('API URL is not defined in environment variables');
+      }
+
+      const res = await axios.post(`${API_URL}/auth/register`, { name, email, password, role });
+
+      if (res.data.token && res.data.user) {
+        localStorage.setItem('token', res.data.token);
+        localStorage.setItem('user', JSON.stringify(res.data.user));
+        setCurrentUser(res.data.user);
+      } else {
+        throw new Error('Invalid registration response from server');
+      }
+    } catch (err) {
+      console.error('Registration failed:', err.response?.data?.msg || err.message);
+      throw err;
+    }
   };
 
   const logout = () => {
@@ -43,12 +71,12 @@ export function AuthProvider({ children }) {
     currentUser,
     login,
     register,
-    logout
+    logout,
   };
 
   return (
     <AuthContext.Provider value={value}>
-      {!loading && children}
+      {!loading ? children : <p>Loading...</p>}
     </AuthContext.Provider>
   );
 }

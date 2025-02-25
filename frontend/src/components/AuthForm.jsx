@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/authcontext';
+import { useAuth } from '../context/AuthContext';
 
 export default function AuthForm({ type }) {
-  const [formData, setFormData] = useState({ name: '', email: '', password: '' });
+  const [formData, setFormData] = useState({ name: '', email: '', password: '', role: '' });
   const [error, setError] = useState('');
   const { login, register } = useAuth();
   const navigate = useNavigate();
@@ -14,7 +14,7 @@ export default function AuthForm({ type }) {
       if (type === 'login') {
         await login(formData.email, formData.password);
       } else {
-        await register(formData.name, formData.email, formData.password, 'student');
+        await register(formData.name, formData.email, formData.password, formData.role);
       }
       navigate('/dashboard');
     } catch (err) {
@@ -74,6 +74,24 @@ export default function AuthForm({ type }) {
                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
               />
             </div>
+            {type === 'register' && (
+              <div>
+                <label htmlFor="role" className="sr-only">Role</label>
+                <select
+                  id="role"
+                  name="role"
+                  required
+                  className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                  value={formData.role}
+                  onChange={(e) => setFormData({ ...formData, role: e.target.value })}
+                >
+                  <option value="">Select Role</option>
+                  <option value="student">Student</option>
+                  <option value="admin">Club Admin</option>
+                  <option value="sponsor">Sponsor</option>
+                </select>
+              </div>
+            )}
           </div>
 
           <div>
