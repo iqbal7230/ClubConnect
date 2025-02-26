@@ -11,7 +11,8 @@ import ProfilePage from './pages/ProfilePage';
 import ChatRoom from './pages/ChatRoom';
 // import ProfilePage from './pages/ProfilePage';
 
-import UserProfile from "./components/UserProfile/UserProfile";
+
+import UserProfile from "./pages/UserProfile";
 
 const user = {
   name: "John Doe",

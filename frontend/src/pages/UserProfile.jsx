@@ -1,8 +1,8 @@
 // src/components/UserProfile/UserProfile.jsx
-import Header from "./Header";
-import BasicInfo from "./BasicInfo";
-import AboutSection from "./AboutSection";
-import ActivityStats from "./ActivityStatus";
+import Header from "../components/UserProfile/Header";
+import BasicInfo from "../components/UserProfile/BasicInfo";
+import AboutSection from "../components/UserProfile/AboutSection";
+import ActivityStats from "../components/UserProfile/ActivityStatus";
 
 const UserProfile = ({ user }) => {
   return (
