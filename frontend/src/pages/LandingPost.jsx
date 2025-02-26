@@ -22,7 +22,14 @@ const LandingPost = () => {
       setError(null)
 
       try {
+<<<<<<< HEAD
         const response = await fetch(`${API_BASE_URL}/api/v1/events/getEvent`, { signal })
+=======
+        
+        console.log('Fetching from:', `${API_BASE_URL}events/getEvent`);
+        
+        const response = await fetch(`${API_BASE_URL}/events/getEvent`, { signal });
+>>>>>>> ba77b29eb95db4879d6cab8497c83b4649356ff4
 
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`)

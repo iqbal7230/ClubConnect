@@ -8,6 +8,33 @@ import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import './App.css';
 import ProfilePage from './pages/ProfilePage';
+import ChatRoom from './pages/ChatRoom';
+// import ProfilePage from './pages/ProfilePage';
+
+
+import UserProfile from "./pages/UserProfile";
+
+const user = {
+  name: "John Doe",
+  tagline: "Tech Enthusiast | Traveler",
+  profilePicture: "https://via.placeholder.com/150",
+  coverPhoto: "https://via.placeholder.com/1200x300",
+  socialMedia: {
+    twitter: "#",
+    linkedin: "#",
+    instagram: "#",
+  },
+  email: "john.doe@example.com",
+  location: "New York, USA",
+  joinedDate: "March 2023",
+  role: "Student",
+  bio: "Passionate about technology and design. Love traveling and exploring new cultures.",
+  interests: ["Photography", "Coding", "Traveling"],
+  skills: ["JavaScript", "React", "UI/UX Design"],
+  eventsAttended: 12,
+  posts: 45,
+  badges: ["Top Contributor", "Event Organizer"],
+};
 import EventForm from './pages/EventForm';
 import LandingPost from './pages/LandingPost';
 import TrendingPage from './pages/TrendingPage';
@@ -20,8 +47,22 @@ function App() {
       <AuthProvider>
         <Routes>
           {/* Public routes */}
+<<<<<<< HEAD
           {/* <Route path="/" element={<LandingPage/>} /> */}
           <Route path="/" element={<TrendingPage/>} />
+=======
+          <Route path="/" element={<LandingPage/>} />
+          {/* <Route path="/profile/:id" element={<ProfilePage />} /> */}
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/chat" element={<ChatRoom/>} />
+         
+          
+          <Route path="/profile" element={<UserProfile user={user} />} />
+          {/* need to set route of chat */}
+          
+
+>>>>>>> ba77b29eb95db4879d6cab8497c83b4649356ff4
           <Route path="/profile/:id" element={<ProfilePage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
@@ -47,6 +88,8 @@ function App() {
         </Routes>
       </AuthProvider>
     </Router>
+    
+    
   );
 }
 

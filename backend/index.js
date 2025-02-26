@@ -2,7 +2,7 @@ import express from 'express';
 import connectDB from './database/db.js';
 import cors from 'cors';
 import authRouter from './routes/authRoutes.js';
-import eventRouter from './routes/eventRoutes.js';
+import EventRouter from './routes/eventRoutes.js';
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -18,11 +18,8 @@ app.use(express.json());
 
 // Routes
 app.use('/api/v1/auth', authRouter);
-app.use('/api/v1/events', eventRouter);
+app.use('/api/v1/events', EventRouter);
 
-
-// Error handling middleware
-// app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
