@@ -1,4 +1,4 @@
-// controllers/eventController.js
+
 import Event from '../models/Event.js';
 import cloudinary from '../utils/cloudinary.js';
 
@@ -7,6 +7,7 @@ export const createEvent = async (req, res) => {
     const {
       name,
       institution,
+      venue,
       date,
       time,
       isFree,
@@ -53,6 +54,7 @@ export const createEvent = async (req, res) => {
     const event = new Event({
       name,
       institution,
+      venue,
       date: new Date(date),
       clubName,
       performer,
@@ -105,3 +107,53 @@ export const getEvents = async (req, res) => {
     });
   }
 };
+
+
+export const toggleLike = async (req, res) => {
+  try {
+    const { eventId } = req.params;
+    const event = await Event.findById(eventId);
+    
+    if (!event) {
+      return res.status(404).json({
+        success: false,
+        message: 'Event not found'
+      });
+    }
+
+    // Increment like count
+    event.likeCount = (event.likeCount || 0) + 1;
+    await event.save();
+
+    res.status(200).json({
+      success: true,
+      likeCount: event.likeCount
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message
+    });
+  }
+};
+
+
+export const getTopLikedEvents = async (req, res) => {
+  try {
+    const topEvents = await Event.find()
+      .sort({ likeCount: -1 }) 
+      .limit(3); 
+
+    res.status(200).json({
+      success: true,
+      data: topEvents
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message
+    });
+  }
+};
+
+

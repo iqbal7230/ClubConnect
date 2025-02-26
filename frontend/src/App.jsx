@@ -10,6 +10,7 @@ import './App.css';
 import ProfilePage from './pages/ProfilePage';
 import EventForm from './pages/EventForm';
 import LandingPost from './pages/LandingPost';
+import TrendingPage from './pages/TrendingPage';
 // import ChatRoom from './pages/ChatRoom';
 
 
@@ -19,7 +20,8 @@ function App() {
       <AuthProvider>
         <Routes>
           {/* Public routes */}
-          <Route path="/" element={<LandingPage/>} />
+          {/* <Route path="/" element={<LandingPage/>} /> */}
+          <Route path="/" element={<TrendingPage/>} />
           <Route path="/profile/:id" element={<ProfilePage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />

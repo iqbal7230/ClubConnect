@@ -7,6 +7,14 @@ const eventSchema = new mongoose.Schema({
     required: [true, 'Event name is required'],
     trim: true
   },
+  venue: {                   
+    type: String,
+    required: [true, 'Venue is required'],
+    trim: true},
+  likeCount: {
+    type: Number,
+    default: 0
+  },
   clubName: {  
     type: String,
     required: true
