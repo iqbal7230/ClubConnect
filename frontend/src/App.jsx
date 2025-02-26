@@ -47,7 +47,6 @@ function App() {
         <Routes>
           {/* Public routes */}
           <Route path="/" element={<LandingPage/>} />
-<<<<<<< HEAD
           {/* <Route path="/profile/:id" element={<ProfilePage />} /> */}
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
@@ -58,7 +57,6 @@ function App() {
           {/* need to set route of chat */}
           
 
-=======
           <Route path="/profile/:id" element={<ProfilePage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
@@ -69,7 +67,6 @@ function App() {
           
 
 
->>>>>>> fbfe50b069082278794bf8297262e156a5c43976
           {/* Private routes */}
           <Route
             path="/dashboard"
@@ -85,11 +82,8 @@ function App() {
         </Routes>
       </AuthProvider>
     </Router>
-<<<<<<< HEAD
     
     
-=======
->>>>>>> fbfe50b069082278794bf8297262e156a5c43976
   );
 }
 
