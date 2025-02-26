@@ -38,7 +38,7 @@ const [formData, setFormData] = useState({
     });
 
     try {
-      const response = await axios.post(`${API_BASE_URL}/api/v1/events/create`, submitData, {
+      const response = await axios.post(`${API_BASE_URL}/events/create`, submitData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
