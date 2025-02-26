@@ -35,6 +35,9 @@ const user = {
   posts: 45,
   badges: ["Top Contributor", "Event Organizer"],
 };
+import EventForm from './pages/EventForm';
+import LandingPost from './pages/LandingPost';
+// import ChatRoom from './pages/ChatRoom';
 
 
 function App() {
@@ -44,6 +47,7 @@ function App() {
         <Routes>
           {/* Public routes */}
           <Route path="/" element={<LandingPage/>} />
+<<<<<<< HEAD
           {/* <Route path="/profile/:id" element={<ProfilePage />} /> */}
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
@@ -54,6 +58,18 @@ function App() {
           {/* need to set route of chat */}
           
 
+=======
+          <Route path="/profile/:id" element={<ProfilePage />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/event" element={<EventForm/>} />
+
+          <Route path="/landingpost" element={<LandingPost/>} />
+          {/* need to set route of chat */}
+          
+
+
+>>>>>>> fbfe50b069082278794bf8297262e156a5c43976
           {/* Private routes */}
           <Route
             path="/dashboard"
@@ -69,8 +85,11 @@ function App() {
         </Routes>
       </AuthProvider>
     </Router>
+<<<<<<< HEAD
     
     
+=======
+>>>>>>> fbfe50b069082278794bf8297262e156a5c43976
   );
 }
 

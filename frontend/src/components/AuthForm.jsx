@@ -14,7 +14,11 @@ export default function AuthForm({ type }) {
       if (type === 'login') {
         await login(formData.email, formData.password);
       } else {
+<<<<<<< HEAD
         await register(formData.name, formData.email, formData.password, formData.role);
+=======
+        await register(formData.name, formData.email, formData.password, 'student');
+>>>>>>> fbfe50b069082278794bf8297262e156a5c43976
       }
       navigate('/dashboard');
     } catch (err) {
@@ -74,6 +78,7 @@ export default function AuthForm({ type }) {
                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
               />
             </div>
+<<<<<<< HEAD
             {type === 'register' && (
               <div>
                 <label htmlFor="role" className="sr-only">Role</label>
@@ -92,6 +97,8 @@ export default function AuthForm({ type }) {
                 </select>
               </div>
             )}
+=======
+>>>>>>> fbfe50b069082278794bf8297262e156a5c43976
           </div>
 
           <div>
@@ -117,4 +124,8 @@ export default function AuthForm({ type }) {
       </div>
     </div>
   );
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> fbfe50b069082278794bf8297262e156a5c43976
