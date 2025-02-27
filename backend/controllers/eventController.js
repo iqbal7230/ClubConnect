@@ -111,29 +111,52 @@ export const getEvents = async (req, res) => {
 
 export const toggleLike = async (req, res) => {
   try {
-    const { eventId } = req.params;
-    const event = await Event.findById(eventId);
-    
-    if (!event) {
-      return res.status(404).json({
-        success: false,
-        message: 'Event not found'
+      const event = await Event.findById(req.params.eventId);
+      
+      if (!event) {
+          return res.status(404).json({ message: 'Event not found' });
+      }
+
+      // Initialize likes array if it doesn't exist
+      if (!event.likes) {
+          event.likes = [];
+      }
+
+      // Get user ID from auth middleware
+      const userId = req.user._id; // Make sure your auth middleware provides this
+
+      // Check if user has already liked the event
+      const userLikeIndex = event.likes.findIndex(
+          (id) => id.toString() === userId.toString()
+      );
+      
+      if (userLikeIndex === -1) {
+          // User hasn't liked the event yet - add like
+          event.likes.push(userId);
+          event.likeCount = (event.likeCount || 0) + 1;
+      } else {
+          // User already liked - remove like
+          event.likes.splice(userLikeIndex, 1);
+          event.likeCount = Math.max(0, (event.likeCount || 1) - 1);
+      }
+
+      // Save the updated event
+      await event.save();
+      
+      return res.json({ 
+          success: true,
+          likeCount: event.likeCount,
+          isLiked: userLikeIndex === -1,
+          message: userLikeIndex === -1 ? 'Event liked successfully' : 'Event unliked successfully'
       });
-    }
 
-    // Increment like count
-    event.likeCount = (event.likeCount || 0) + 1;
-    await event.save();
-
-    res.status(200).json({
-      success: true,
-      likeCount: event.likeCount
-    });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message
-    });
+      console.error('Error in toggleLike:', error);
+      res.status(500).json({ 
+          success: false, 
+          message: 'Error processing like/unlike',
+          error: error.message 
+      });
   }
 };
 
@@ -152,6 +175,85 @@ export const getTopLikedEvents = async (req, res) => {
     res.status(500).json({
       success: false,
       message: error.message
+    });
+  }
+};
+
+
+export const likeEvent = async (req, res) => {
+  try {
+    const eventId = req.params.id;
+    const userId = req.user._id; // From auth middleware
+
+    const event = await Event.findById(eventId);
+    
+    if (!event) {
+      return res.status(404).json({
+        success: false,
+        message: 'Event not found'
+      });
+    }
+
+    // Check if user has already liked the event
+    const isLiked = event.likes.includes(userId);
+
+    if (isLiked) {
+      // Unlike: Remove user from likes array
+      event.likes = event.likes.filter(id => id.toString() !== userId.toString());
+      event.likeCount = Math.max(0, event.likeCount - 1);
+    } else {
+      // Like: Add user to likes array
+      event.likes.push(userId);
+      event.likeCount = (event.likeCount || 0) + 1;
+    }
+
+    await event.save();
+
+    res.json({
+      success: true,
+      data: {
+        likeCount: event.likeCount,
+        isLiked: !isLiked
+      }
+    });
+  } catch (error) {
+    console.error('Like event error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error processing like'
+    });
+  }
+};
+
+
+
+export const getLikeStatus = async (req, res) => {
+  try {
+    const eventId = req.params.id;
+    const userId = req.user._id;
+
+    const event = await Event.findById(eventId);
+    if (!event) {
+      return res.status(404).json({
+        success: false,
+        message: 'Event not found'
+      });
+    }
+
+    const isLiked = event.likes.includes(userId);
+
+    res.json({
+      success: true,
+      data: {
+        likeCount: event.likeCount,
+        isLiked
+      }
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Error fetching like status',
+      error: error.message
     });
   }
 };

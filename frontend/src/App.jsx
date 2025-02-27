@@ -47,13 +47,11 @@ function App() {
       <AuthProvider>
         <Routes>
           {/* Public routes */}
-<<<<<<< HEAD
           {/* <Route path="/" element={<LandingPage/>} /> */}
           <Route path="/" element={<TrendingPage/>} />
-=======
-          <Route path="/" element={<LandingPage/>} />
+         
           {/* <Route path="/profile/:id" element={<ProfilePage />} /> */}
-          <Route path="/login" element={<Login />} />
+          
           <Route path="/register" element={<Register />} />
           <Route path="/chat" element={<ChatRoom/>} />
          
@@ -62,13 +60,13 @@ function App() {
           {/* need to set route of chat */}
           
 
->>>>>>> ba77b29eb95db4879d6cab8497c83b4649356ff4
           <Route path="/profile/:id" element={<ProfilePage />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
+          
           <Route path="/event" element={<EventForm/>} />
 
           <Route path="/landingpost" element={<LandingPost/>} />
+         
           {/* need to set route of chat */}
           
 

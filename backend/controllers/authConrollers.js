@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 import User from '../models/Users.js';
 import asyncHandler from '../middleware/asyncHandler.js';
 import dotenv from 'dotenv';
-import ErrorResponse from '../utils/ErrorResponse.js'; // Ensure this utility exists
+import ErrorResponse from '../utils/errorResponse.js'; 
 
 dotenv.config();
 

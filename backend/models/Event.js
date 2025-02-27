@@ -11,10 +11,18 @@ const eventSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Venue is required'],
     trim: true},
-  likeCount: {
-    type: Number,
-    default: 0
-  },
+    
+    likes: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
+    likeCount: {
+      type: Number,
+      default: 0,
+    },
+    
   clubName: {  
     type: String,
     required: true
@@ -66,7 +74,7 @@ const eventSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: Date.now
-  }
+  },
 });
 
 export default mongoose.model('Event', eventSchema);
