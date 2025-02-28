@@ -2,13 +2,10 @@ import jwt from 'jsonwebtoken';
 import User from '../models/Users.js';
 import asyncHandler from '../middleware/asyncHandler.js';
 import dotenv from 'dotenv';
-import ErrorResponse from '../utils/ErrorResponse.js'; // Ensure this utility exists
+import ErrorResponse from '../utils/ErrorResponse.js'; 
 
 dotenv.config();
 
-// @desc    Register a new user
-// @route   POST /api/auth/register
-// @access  Public
 export const register = asyncHandler(async (req, res, next) => {
   const { name, email, password, role } = req.body;
 
@@ -24,9 +21,7 @@ export const register = asyncHandler(async (req, res, next) => {
   sendTokenResponse(user, 201, res);
 });
 
-// @desc    Login user
-// @route   POST /api/auth/login
-// @access  Public
+
 export const login = asyncHandler(async (req, res, next) => {
   const { email, password } = req.body;
 
