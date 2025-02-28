@@ -7,7 +7,6 @@ import SearchEvents from '../components/SearchEvents';
 const LandingPage = () => {
   const { currentUser, logout } = useAuth();
 
-  // Mock data for posts
   const [allPosts, setAllPosts] = useState([
     {
       id: 1,
@@ -43,7 +42,6 @@ const LandingPage = () => {
 
   const [filteredPosts, setFilteredPosts] = useState(allPosts);
 
-  // Function to handle reactions
   const handleReaction = (postId, type) => {
     setFilteredPosts((prevPosts) =>
       prevPosts.map((post) => {
@@ -56,7 +54,6 @@ const LandingPage = () => {
     );
   };
 
-  // Function to handle search
   const handleSearch = (query) => {
     const filtered = allPosts.filter((post) => {
       const matchesVenue = post.location.toLowerCase().includes(query.toLowerCase());
@@ -66,113 +63,60 @@ const LandingPage = () => {
     setFilteredPosts(filtered);
   };
 
-  // Function to add a comment
-  const handleAddComment = (postId, comment) => {
-    setFilteredPosts((prevPosts) =>
-      prevPosts.map((post) =>
-        post.id === postId ? { ...post, comments: [...post.comments, comment] } : post
-      )
-    );
-  };
-
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Navigation Bar */}
-      <nav className="bg-white shadow-sm sticky top-0 z-50">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16 items-center">
-            <Link to="/" className="text-2xl font-bold text-gray-900">
-              CampusConnect
-            </Link>
-            <SearchEvents onSearch={handleSearch} />
-            <div className="flex items-center space-x-4">
-              {currentUser ? (
-                <button onClick={logout} className="px-4 py-2 text-gray-700 hover:text-indigo-600">
-                  Logout
-                </button>
-              ) : (
-                <>
-                  <Link to="/login" className="px-4 py-2 text-gray-700 hover:text-indigo-600">
-                    Sign In
-                  </Link>
-                  <Link to="/register" className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700">
-                    Sign Up
-                  </Link>
-                </>
-              )}
-            </div>
-          </div>
+    <div className="min-h-screen bg-black text-white relative">
+      <nav className="bg-gray-900 shadow-lg sticky top-0 z-50 py-4 px-6 flex justify-between items-center">
+        <Link to="/" className="text-3xl font-bold text-white">CampusConnect</Link>
+        <SearchEvents onSearch={handleSearch} />
+        <div className="flex items-center space-x-4">
+          {currentUser ? (
+            <button onClick={logout} className="px-4 py-2 text-gray-300 hover:text-indigo-400 transition">Logout</button>
+          ) : (
+            <>
+              <Link to="/login" className="px-4 py-2 text-gray-300 hover:text-indigo-400 transition">Sign In</Link>
+              <Link to="/register" className="px-4 py-2 bg-indigo-600 text-white rounded-lg shadow-md hover:bg-indigo-700 transition transform hover:scale-105">Sign Up</Link>
+            </>
+          )}
         </div>
       </nav>
 
-      {/* Main Content */}
-      <main className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="space-y-6">
+      <main className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="space-y-8">
           {filteredPosts.map((post) => (
-            <div key={post.id} className="bg-white rounded-lg shadow-md overflow-hidden">
-              {/* Post Header */}
-              <div className="flex items-center justify-between p-4 border-b">
+            <div key={post.id} className="bg-gray-900 rounded-lg shadow-lg overflow-hidden transition transform hover:scale-105 hover:shadow-xl border border-gray-700">
+              <div className="p-4 flex items-center justify-between border-b border-gray-700">
                 <div className="flex items-center space-x-3">
                   <Link to={`/profile/${post.id}`}>
-                    <img src={post.profileImage} alt={post.club} className="w-10 h-10 rounded-full object-cover" />
+                    <img src={post.profileImage} alt={post.club} className="w-12 h-12 rounded-full object-cover border border-gray-600" />
                   </Link>
                   <div>
-                    <h3 className="font-semibold">{post.club}</h3>
-                    <p className="text-gray-500 text-sm">{post.location}</p>
+                    <h3 className="font-semibold text-lg">{post.club}</h3>
+                    <p className="text-gray-400 text-sm">{post.location}</p>
                   </div>
                 </div>
-                <button className="text-gray-500 hover:text-gray-700">
+                <button className="text-gray-400 hover:text-white transition">
                   <EllipsisHorizontalIcon className="h-6 w-6" />
                 </button>
               </div>
-
-              {/* Event Image */}
               <img src={post.image} alt={post.title} className="w-full h-64 object-cover" />
-
-              {/* Interaction Buttons */}
               <div className="p-4 space-y-2">
                 <div className="flex items-center justify-between">
-                  <button onClick={() => handleReaction(post.id, 'likes')} className="flex items-center space-x-2 text-gray-700 hover:text-red-500">
+                  <button onClick={() => handleReaction(post.id, 'likes')} className="flex items-center space-x-2 text-gray-400 hover:text-red-400 transition">
                     <HeartIcon className="h-6 w-6" />
                     <span>{post.likes}</span>
                   </button>
-
-                  <button className="flex items-center space-x-2 text-gray-700 hover:text-blue-500">
+                  <button className="flex items-center space-x-2 text-gray-400 hover:text-blue-400 transition">
                     <ChatBubbleOvalLeftIcon className="h-6 w-6" />
                     <span>{post.comments.length}</span>
                   </button>
-
-                  <button onClick={() => handleReaction(post.id, 'shares')} className="flex items-center space-x-2 text-gray-700 hover:text-green-500">
+                  <button onClick={() => handleReaction(post.id, 'shares')} className="flex items-center space-x-2 text-gray-400 hover:text-green-400 transition">
                     <ShareIcon className="h-6 w-6" />
                     <span>{post.shares}</span>
                   </button>
-
-                  <Link to={`/profile/${post.id}`} className="flex items-center space-x-2 text-gray-700 hover:text-purple-500">
+                  <Link to={`/profile/${post.id}`} className="flex items-center space-x-2 text-gray-400 hover:text-purple-400 transition">
                     <CurrencyDollarIcon className="h-6 w-6" />
                     <span>{post.sponsors}</span>
                   </Link>
-                </div>
-
-                {/* Comment Section */}
-                <div className="mt-4">
-                  <h3 className="font-semibold mb-2">Comments</h3>
-                  <div className="space-y-2">
-                    {post.comments.map((comment, index) => (
-                      <div key={index} className="flex items-start space-x-2">
-                        <img src={post.profileImage} alt="User" className="w-6 h-6 rounded-full object-cover" />
-                        <div className="bg-gray-100 p-2 rounded-lg">
-                          <p className="text-sm">{comment}</p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                  <input type="text" placeholder="Add a comment..." className="w-full px-3 py-2 border rounded-md"
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter' && e.target.value.trim()) {
-                        handleAddComment(post.id, e.target.value.trim());
-                        e.target.value = '';
-                      }
-                    }} />
                 </div>
               </div>
             </div>
