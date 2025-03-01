@@ -2,18 +2,17 @@ import React, { useState } from 'react';
 import axios from 'axios';
 
 const EventForm = () => {
-
-const [like,setlike]=useState([0]);
-const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState({
     name: '',
     institution: '',
+    venue: '',
     date: '',
     time: '',
     isFree: true,
     price: 0,
     description: '',
-    clubName: '', 
-    performer: '', 
+    clubName: '',
+    performer: '',
   });
   const [images, setImages] = useState([]);
   const [previewImages, setPreviewImages] = useState([]);
@@ -26,13 +25,18 @@ const [formData, setFormData] = useState({
     e.preventDefault();
     setIsSubmitting(true);
 
-    const submitData = new FormData();
+    // Client-side validation for images
+    if (images.length === 0) {
+      setMessage({ text: 'Please upload at least one image', type: 'error' });
+      setIsSubmitting(false);
+      return;
+    }
 
+    const submitData = new FormData();
     Object.keys(formData).forEach(key => {
       submitData.append(key, formData[key]);
     });
 
-    // Append images
     images.forEach(image => {
       submitData.append('images', image);
     });
@@ -46,15 +50,18 @@ const [formData, setFormData] = useState({
 
       setMessage({ text: 'Event created successfully!', type: 'success' });
       
-   
+      // Reset all form fields
       setFormData({
         name: '',
         institution: '',
+        venue: '',
         date: '',
         time: '',
         isFree: true,
         price: 0,
-        description: ''
+        description: '',
+        clubName: '',
+        performer: '',
       });
       setImages([]);
       setPreviewImages([]);
@@ -95,15 +102,14 @@ const [formData, setFormData] = useState({
       
       if (selectedFiles.length > 3) {
         setMessage({ text: 'You can only upload up to 3 images', type: 'error' });
+        setImages([]);
+        setPreviewImages([]);
         return;
       }
       
       setImages(selectedFiles);
-      
-      // Create preview URLs
       const imagePreviews = selectedFiles.map(file => URL.createObjectURL(file));
       setPreviewImages(imagePreviews);
-      
       setMessage({ text: '', type: '' });
     }
   };
@@ -132,42 +138,44 @@ const [formData, setFormData] = useState({
               name="name"
               value={formData.name}
               onChange={handleChange}
+              required
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Enter event name"
             />
           </div>
-          {/* Club Name */}
-<div className="md:col-span-2">
-  <label htmlFor="clubName" className="block text-sm font-medium text-gray-700 mb-1">
-    Club Name *
-  </label>
-  <input
-    type="text"
-    id="clubName"
-    name="clubName"
-    value={formData.clubName}
-    onChange={handleChange}
-    required
-    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-    placeholder="Enter club name"
-  />
-</div>
 
-{/* Performer Name */}
-<div className="md:col-span-2">
-  <label htmlFor="performer" className="block text-sm font-medium text-gray-700 mb-1">
-    Performer Name (Optional)
-  </label>
-  <input
-    type="text"
-    id="performer"
-    name="performer"
-    value={formData.performer}
-    onChange={handleChange}
-    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-    placeholder="Enter performer name"
-  />
-</div>
+          {/* Club Name */}
+          <div className="md:col-span-2">
+            <label htmlFor="clubName" className="block text-sm font-medium text-gray-700 mb-1">
+              Club Name *
+            </label>
+            <input
+              type="text"
+              id="clubName"
+              name="clubName"
+              value={formData.clubName}
+              onChange={handleChange}
+              required
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Enter club name"
+            />
+          </div>
+
+          {/* Performer Name */}
+          <div className="md:col-span-2">
+            <label htmlFor="performer" className="block text-sm font-medium text-gray-700 mb-1">
+              Performer Name (Optional)
+            </label>
+            <input
+              type="text"
+              id="performer"
+              name="performer"
+              value={formData.performer}
+              onChange={handleChange}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Enter performer name"
+            />
+          </div>
 
           {/* Institution */}
           <div>
@@ -180,11 +188,29 @@ const [formData, setFormData] = useState({
               name="institution"
               value={formData.institution}
               onChange={handleChange}
+              required
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Enter institution name"
             />
           </div>
-          
+
+          {/* Venue */}
+          <div>
+            <label htmlFor="venue" className="block text-sm font-medium text-gray-700 mb-1">
+              Venue *
+            </label>
+            <input
+              type="text"
+              id="venue"
+              name="venue"
+              value={formData.venue}
+              onChange={handleChange}
+              required
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Enter event venue"
+            />
+          </div>
+
           {/* Date */}
           <div>
             <label htmlFor="date" className="block text-sm font-medium text-gray-700 mb-1">
@@ -196,6 +222,7 @@ const [formData, setFormData] = useState({
               name="date"
               value={formData.date}
               onChange={handleChange}
+              required
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
@@ -211,8 +238,8 @@ const [formData, setFormData] = useState({
               name="time"
               value={formData.time}
               onChange={handleChange}
+              required
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="14:30"
             />
           </div>
           
@@ -245,6 +272,7 @@ const [formData, setFormData] = useState({
                   onChange={handleChange}
                   min="0"
                   step="0.01"
+                  required={!formData.isFree}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="Enter price"
                 />
@@ -264,6 +292,7 @@ const [formData, setFormData] = useState({
             value={formData.description}
             onChange={handleChange}
             rows="4"
+            required
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="Enter event description"
           ></textarea>
@@ -304,6 +333,7 @@ const [formData, setFormData] = useState({
                     accept="image/*"
                     onChange={handleImageChange}
                     className="sr-only"
+                    required
                   />
                 </label>
                 <p className="pl-1">or drag and drop</p>

@@ -67,7 +67,7 @@ const ChatInterface = () => {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Ask about event planning..."
-            className="flex-1 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="flex-1 p-2 border text-black rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
             disabled={isLoading}
           />
           <button

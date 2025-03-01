@@ -73,11 +73,16 @@ const LandingPage = () => {
             <button onClick={logout} className="px-4 py-2 text-gray-300 hover:text-indigo-400 transition">Logout</button>
           ) : (
             <>
-              <Link to="/login" className="px-4 py-2 text-gray-300 hover:text-indigo-400 transition">Sign In</Link>
+              <Link to="/login" className="px-4 py-2 bg-indigo-600 text-white rounded-lg shadow-md hover:bg-indigo-700 transition transform hover:scale-105">Sign In</Link>
               <Link to="/register" className="px-4 py-2 bg-indigo-600 text-white rounded-lg shadow-md hover:bg-indigo-700 transition transform hover:scale-105">Sign Up</Link>
             </>
           )}
         </div>
+       
+        <div className="flex items-center space-x-4 px-1.5">
+          <Link to="/chat" className="px-4 py-2 bg-indigo-600 text-white rounded-lg shadow-md hover:bg-indigo-700 transition transform hover:scale-105">Ask to AI</Link>
+        </div>
+
       </nav>
 
       <main className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">

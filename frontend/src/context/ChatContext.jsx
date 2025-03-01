@@ -1,12 +1,13 @@
 import { createContext, useContext, useState } from 'react';
-import { generateResponse } from '../services/geminiService';
-
+import { generateResponse } from '../services/geminiService.js';
 const ChatContext = createContext();
+
 
 export const ChatProvider = ({ children }) => {
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  
 
   const handleNewMessage = async (input) => {
     try {
