@@ -18,11 +18,11 @@ CLUB CONNECTX is a one-stop solution designed to bridge the gap between students
 ### 🛠 Tech Stack  
 - **Frontend**: React.js, Tailwind CSS  
 - **Backend**: Node.js, Express.js  
-- **Database**: PostgreSQL  
+- **Database**: Mongodb 
 - **Authentication**: JWT  
 - **AI Chatbot**: Gemini API  
-- **Blockchain**: Smart contracts for digital voting  
-- **Hosting**: AWS / Vercel  
+- **Blockchain**: Smart contracts for digital voting and Digital Certification
+- **Hosting**: Vercel  
 
 
 ### 🔄 Workflow  
@@ -40,8 +40,8 @@ CLUB CONNECTX is a one-stop solution designed to bridge the gap between students
    - Club admin reviews & approves/rejects requests  
    - Events get updated with sponsor details  
 
-### 🎥 Demo Video  
-[Link to Demo Video (To be added)]  
+<!-- ### 🎥 Demo Video  
+[Link to Demo Video (To be added)]   -->
 
 ### 💡 Scalability & Feasibility  
 - **Modular Architecture** - Independent, reusable components.  
