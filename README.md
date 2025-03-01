@@ -1,85 +1,54 @@
-Buiding something big which even we don't know 
+# CLUB CONNECTX  
 
-Socket.io setup
-2️⃣ Create server.js
+### 🚀 Overview  
+CLUB CONNECTX is a one-stop solution designed to bridge the gap between students, clubs, and opportunities within a university ecosystem. It provides a centralized platform for event management, digital voting, AI-powered assistance, and sponsorship facilitation.  
 
-const express = require("express");
-const http = require("http");
-const mongoose = require("mongoose");
-const cors = require("cors");
-const { Server } = require("socket.io");
-require("dotenv").config();
+### 🎯 Problem Statement  
+- No unified platform for club activities and events.  
+- Low student engagement in clubs.  
+- Inefficient voting and certification processes.  
 
-const app = express();
-const server = http.createServer(app);
-const io = new Server(server, {
-    cors: {
-        origin: "http://localhost:5173",
-        methods: ["GET", "POST"],
-    },
-});
+### 🔥 Key Features  
+✅ **Event Posting** - Clubs can list and manage events in one place.  
+✅ **AI Chatbot** - Provides instant support and information.  
+✅ **Sponsorship Management** - Connects clubs with sponsors seamlessly.  
+✅ **Digital Voting** - Ensures secure and transparent elections using blockchain.  
+✅ **Digital Certifications** - Offers verified digital certificates for event participation.  
 
-// Middleware
-app.use(cors());
-app.use(express.json());
+### 🛠 Tech Stack  
+- **Frontend**: React.js, Tailwind CSS  
+- **Backend**: Node.js, Express.js  
+- **Database**: PostgreSQL  
+- **Authentication**: JWT  
+- **AI Chatbot**: Gemini API  
+- **Blockchain**: Smart contracts for digital voting  
+- **Hosting**: AWS / Vercel  
 
-// MongoDB Connection
-mongoose.connect(process.env.MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-}).then(() => console.log("MongoDB Connected"))
-  .catch(err => console.error(err));
 
-// Socket.io Logic
-io.on("connection", (socket) => {
-    console.log("A user connected:", socket.id);
+### 🔄 Workflow  
+![alt text](img/final-diag.jpg)
+1. **Students & Sponsors Register/Login**  
+2. **Students Access Website**  
+   - Browse events  
+   - Use AI chatbot for assistance  
+   - Participate in digital voting  
+3. **Club Admin Manages Events**  
+   - Posts new events  
+   - Reviews sponsorship applications  
+   - Issues digital certificates  
+4. **Sponsors Apply for Sponsorships**  
+   - Club admin reviews & approves/rejects requests  
+   - Events get updated with sponsor details  
 
-    socket.on("sendMessage", (message) => {
-        io.emit("receiveMessage", message);
-    });
+### 🎥 Demo Video  
+[Link to Demo Video (To be added)]  
 
-    socket.on("disconnect", () => {
-        console.log("User disconnected:", socket.id);
-    });
-});
+### 💡 Scalability & Feasibility  
+- **Modular Architecture** - Independent, reusable components.  
+- **Microservices Backend** - Enables independent scaling of services.  
+- **Optimized Database** - Uses indexing, caching for better performance.  
+- **Cloud Hosting** - AWS ensures scalability and reliability.  
+- **MVP Approach** - Focuses on core features first and expands based on feedback.  
 
-// Start Server
-const PORT = process.env.PORT || 5000;
-server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-
-Create models/Message.js
-const mongoose = require("mongoose");
-
-const MessageSchema = new mongoose.Schema({
-    user: String,
-    message: String,
-    timestamp: { type: Date, default: Date.now },
-});
-
-module.exports = mongoose.model("Message", MessageSchema);
-
-Create routes/messages.js
-const express = require("express");
-const Message = require("../models/Message");
-
-const router = express.Router();
-
-// Get All Messages
-router.get("/", async (req, res) => {
-    const messages = await Message.find().sort({ timestamp: 1 });
-    res.json(messages);
-});
-
-// Save Message
-router.post("/", async (req, res) => {
-    const newMessage = new Message(req.body);
-    await newMessage.save();
-    res.status(201).json(newMessage);
-});
-
-module.exports = router;
-
-Update server.js to Use API Route
-const messageRoutes = require("./routes/messages");
-app.use("/api/messages", messageRoutes);
+---
 
