@@ -4,7 +4,6 @@ import { useAuth } from '../context/authContext';
 import { useState } from 'react';
 import { HeartIcon, ChatBubbleOvalLeftIcon, BookmarkIcon, EllipsisHorizontalIcon } from '@heroicons/react/24/outline';
 
-
 const LandingPage = () => {
     const { currentUser, logout } = useAuth();
 
@@ -34,10 +33,8 @@ const LandingPage = () => {
             comments: 42,
             location: "Main Campus Grounds"
         },
-        // Add more events as needed
     ]);
    
-
     return (
         <div className="min-h-screen bg-gray-50">
             {/* Navigation Bar */}
@@ -77,8 +74,8 @@ const LandingPage = () => {
             </nav>
 
             {/* Main Content */}
-            <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-8">
+            <main className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                <div className="flex flex-col gap-8">
                     {events.map((event) => (
                         <div key={event.id} className="bg-white rounded-lg shadow-md overflow-hidden">
                             {/* Post Header */}
@@ -103,7 +100,7 @@ const LandingPage = () => {
                             <img
                                 src={event.image}
                                 alt={event.title}
-                                className="w-full  contain-layout"
+                                className="w-full object-cover"
                             />
 
                             {/* Interaction Buttons */}
@@ -116,7 +113,7 @@ const LandingPage = () => {
                                         <ChatBubbleOvalLeftIcon className="h-7 w-7" />
                                     </button>
                                     <button className="text-gray-700 hover:text-gray-900 ml-auto">
-                                        <BookmarkIcon className="h-7 w-7" /> Add to Calender
+                                        <BookmarkIcon className="h-7 w-7" /> Add to Calendar
                                     </button>
                                 </div>
 
@@ -141,10 +138,7 @@ const LandingPage = () => {
                                 {/* View Details Button */}
                                 <button className="text-gray-500 text-sm hover:text-indigo-600">
                                     View details
-                                    </button>
-                              
-                                
-                               
+                                </button>
                             </div>
                         </div>
                     ))}
