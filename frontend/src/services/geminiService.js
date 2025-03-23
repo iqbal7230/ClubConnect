@@ -1,20 +1,45 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import axios from "axios";
 
-const apikey= 'AIzaSyBiFSh1arfGoP6S0F6pYZRZJIacBWme4vM'
+const apikey = 'AIzaSyBiFSh1arfGoP6S0F6pYZRZJIacBWme4vM';
 const genAI = new GoogleGenerativeAI(apikey);
-// const genAI = new GoogleGenerativeAI(process.env.REACT_APP_GEMINI_API_KEY);
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
+// Fetch all events without filtering
+export const fetchEvents = async () => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/events/all/top-events`);
+    console.log("Fetched Data:", response.data);
+    return response.data;
+  } catch (error) {
+    throw new Error('Failed to fetch events');
+  }
+}
+
+// Generate response using all events
 export const generateResponse = async (prompt) => {
   try {
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-    const result = await model.generateContent(`
-      You are an event planning expert for university clubs. 
-      Provide detailed, practical advice about: ${prompt}
-      Focus on: budget management, team coordination, marketing, logistics, and student engagement.
-    `);
-    return await result.response.text();
+    const events = await fetchEvents();  // Get all events
+    
+    const instruction = `
+      You are a university event assistant. Follow these rules:
+      1. Use ONLY the provided event data
+      2. Be concise and factual
+      3. Format lists with bullet points
+      4. Highlight free events
+    
+      
+      Event Data: ${JSON.stringify(events)}
+      
+      User Query: ${prompt}`;
+
+    const result = await model.generateContent(instruction);
+    const response = await result.response;
+    return response.text();
+
   } catch (error) {
     console.error("Gemini API Error:", error);
-    throw error;
+    throw new Error("AI response generation failed.");
   }
 };

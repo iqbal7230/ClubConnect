@@ -41,7 +41,7 @@ const eventSchema = new mongoose.Schema({
     required: [true, 'Event date is required']
   },
   time: {
-    type: String,    // Store time as string in "HH:mm" format
+    type: String, 
     required: [true, 'Event time is required'],
     validate: {
       validator: function(v) {
@@ -75,6 +75,29 @@ const eventSchema = new mongoose.Schema({
     type: Date,
     default: Date.now
   },
+  //add registrations array field to include leader.name,leader.email, teamName, teamMembers
+  registrations: [{
+    leader: {
+      name: {
+        type: String,
+        required: true
+      },
+      email: {
+        type: String,
+        required: true
+      }
+    },
+    teamName: {
+      type: String,
+      required: true
+    },
+    teamMembers: [
+      {name: { 
+        type: String,
+        required: true
+      }}
+    ]
+  }],
 });
 
 export default mongoose.model('Event', eventSchema);

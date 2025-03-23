@@ -36,10 +36,7 @@ export const login = asyncHandler(async (req, res, next) => {
 
   // Check for user and validate password
   const user = await User.findOne({ email }).select('+password');
-  res.status(200).json({
-    success: true,
-    message: 'User signed in successfully'
-  });
+  
   if (!user || !(await user.matchPassword(password))) {
     return next(new ErrorResponse('Invalid credentials', 401));
   }

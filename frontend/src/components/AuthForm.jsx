@@ -16,7 +16,8 @@ export default function AuthForm({ type }) {
       } else {
         await register(formData.name, formData.email, formData.password, formData.role);
       }
-      navigate('/dashboard');
+      navigate('/all-events');
+      // navigate('/dashboard');
     } catch (err) {
       setError(err.response?.data?.msg || 'Something went wrong');
     }
@@ -87,7 +88,7 @@ export default function AuthForm({ type }) {
                 >
                   <option value="">Select Role</option>
                   <option value="student">Student</option>
-                  <option value="admin">Club Admin</option>
+                  <option value="club-admin">Club Admin</option>
                   <option value="sponsor">Sponsor</option>
                 </select>
               </div>

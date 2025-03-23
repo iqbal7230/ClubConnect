@@ -1,11 +1,20 @@
+// src/pages/TrendingPage.jsx
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/authContext';
 import { useState, useEffect } from 'react';
-import { HeartIcon, ChatBubbleOvalLeftIcon, ShareIcon, CurrencyDollarIcon, EllipsisHorizontalIcon } from '@heroicons/react/24/outline';
+import { 
+  HeartIcon, 
+  ChatBubbleOvalLeftIcon, 
+  ShareIcon, 
+  CurrencyDollarIcon, 
+  EllipsisHorizontalIcon 
+} from '@heroicons/react/24/outline';
 import { HeartIcon as HeartSolidIcon } from '@heroicons/react/24/solid';
 import SearchEvents from '../components/SearchEvents';
 
 const TrendingPage = () => {
+  const navigate = useNavigate();
   const { currentUser, logout } = useAuth();
   const [topPosts, setTopPosts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -15,20 +24,36 @@ const TrendingPage = () => {
     return saved ? JSON.parse(saved) : {};
   });
 
-  // Fetch top 3 most liked events
+  const handleEventClick = (eventId) => {
+    navigate(`/event/${eventId}`);
+  };
+  let likeCount = topPosts.reduce((count, post) => count + (likedPosts[post._id] ? 1 : 0), 0);
+
   useEffect(() => {
     const fetchTopPosts = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/v1/events/top-events`);
+        const apiUrl = `${import.meta.env.VITE_API_BASE_URL}/events/all/top-events`; // Updated endpoint
+        console.log('Fetching from:', apiUrl); // Debug log
+
+        const response = await fetch(apiUrl);
+        console.log('Response status:', response.status); // Debug log
+
         if (!response.ok) {
-          throw new Error('Failed to fetch top events');
+          throw new Error('Failed to fetch events');
         }
+
         const data = await response.json();
-        setTopPosts(data.data);
+        console.log('Fetched data:', data.data); // Debug log
+
+        if (Array.isArray(data.data)) { // Updated to match your backend response
+          setTopPosts(data.data);
+        } else {
+          throw new Error('Invalid data format received');
+        }
       } catch (err) {
         setError(err.message);
-        console.error('Error fetching top posts:', err);
+        console.error('Error fetching posts:', err);
       } finally {
         setLoading(false);
       }
@@ -38,8 +63,13 @@ const TrendingPage = () => {
   }, []);
 
   const handleLike = async (postId) => {
+    
+    if (!currentUser) {
+      navigate('/login');
+      return;
+    }
+
     try {
-      // Optimistic update
       setTopPosts(prevPosts =>
         prevPosts.map(post =>
           post._id === postId
@@ -57,11 +87,11 @@ const TrendingPage = () => {
         return newLikes;
       });
 
-      // API call to update like
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/v1/events/like/${postId}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/events/${postId}/like`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${currentUser.token}` // Add token if you're using JWT
         }
       });
 
@@ -69,10 +99,12 @@ const TrendingPage = () => {
         throw new Error('Failed to update like');
       }
 
-      // Refetch top posts after like update
-      const updatedResponse = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/v1/events/top-events`);
+      // Refetch the updated events
+      const updatedResponse = await fetch(`${import.meta.env.VITE_API_BASE_URL}events/all/top-events`);
       const updatedData = await updatedResponse.json();
-      setTopPosts(updatedData.data);
+      if (Array.isArray(updatedData.data)) {
+        setTopPosts(updatedData.data);
+      }
 
     } catch (error) {
       console.error('Error updating like:', error);
@@ -96,12 +128,17 @@ const TrendingPage = () => {
             <Link to="/" className="text-2xl font-bold text-gray-900">
               CampusConnect
             </Link>
-            <SearchEvents onSearch={() => {}} /> {/* You can implement search functionality if needed */}
+            <SearchEvents onSearch={() => {}} />
             <div className="flex items-center space-x-4">
               {currentUser ? (
-                <button onClick={logout} className="px-4 py-2 text-gray-700 hover:text-indigo-600">
-                  Logout
-                </button>
+                <>
+                  <Link to="/create-event" className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700">
+                    Create Event
+                  </Link>
+                  <button onClick={logout} className="px-4 py-2 text-gray-700 hover:text-indigo-600">
+                    Logout
+                  </button>
+                </>
               ) : (
                 <>
                   <Link to="/login" className="px-4 py-2 text-gray-700 hover:text-indigo-600">
@@ -113,6 +150,9 @@ const TrendingPage = () => {
                 </>
               )}
             </div>
+            <div className="flex items-center space-x-4 px-1.5">
+          <Link to="/chat" className="px-4 py-2 bg-indigo-600 text-white rounded-lg shadow-md hover:bg-indigo-700 transition transform hover:scale-105">Ask to AI</Link>
+        </div>
           </div>
         </div>
       </nav>
@@ -120,7 +160,7 @@ const TrendingPage = () => {
       {/* Main Content */}
       <main className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <h1 className="text-3xl font-bold text-center mb-8">Top Trending Events 🔥</h1>
-        
+
         {loading && (
           <div className="text-center py-10">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto"></div>
@@ -133,39 +173,44 @@ const TrendingPage = () => {
           </div>
         )}
 
+        {!loading && !error && topPosts.length === 0 && (
+          <div className="text-center text-gray-600 py-10">
+            No events found. Be the first to create one!
+          </div>
+        )}
+
         <div className="space-y-6">
           {topPosts.map((post) => (
-            <div key={post._id} className="bg-white rounded-lg shadow-md overflow-hidden">
+            <div 
+              key={post._id} 
+              className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow"
+            >
               {/* Post Header */}
               <div className="flex items-center justify-between p-4 border-b">
                 <div className="flex items-center space-x-3">
-                  <Link to={`/profile/${post._id}`}>
-                    <img 
-                      src={post.profileImage || 'default-profile-image.jpg'} 
-                      alt={post.club} 
-                      className="w-10 h-10 rounded-full object-cover"
-                    />
-                  </Link>
+                  <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center">
+                    {post.clubName?.charAt(0) || 'E'}
+                  </div>
                   <div>
-                    <h3 className="font-semibold">{post.club}</h3>
-                    <p className="text-gray-500 text-sm">{post.location}</p>
+                    <h3 className="font-semibold">{post.clubName || 'Event Club'}</h3>
+                    <p className="text-gray-500 text-sm">{post.venue || 'Location'}</p>
                   </div>
                 </div>
-                <button className="text-gray-500 hover:text-gray-700">
-                  <EllipsisHorizontalIcon className="h-6 w-6" />
-                </button>
               </div>
 
               {/* Event Image */}
               <div className="relative">
                 <img 
-                  src={post.image} 
-                  alt={post.title} 
-                  className="w-full h-64 object-cover"
-                  onDoubleClick={() => handleLike(post._id)}
+                  src={post.images?.[0]?.url || 'default-event-image.jpg'} 
+                  alt={post.name} 
+                  className="w-full h-64 object-cover cursor-pointer"
+                  onClick={() => handleEventClick(post._id)}
                 />
                 <button
-                  onClick={() => handleLike(post._id)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleLike(post._id);
+                  }}
                   className="absolute bottom-4 right-4 p-2 rounded-full bg-white/80 hover:bg-white transition-colors"
                 >
                   {likedPosts[post._id] ? (
@@ -184,23 +229,21 @@ const TrendingPage = () => {
                       <HeartIcon className="h-5 w-5" />
                       <span>{post.likeCount || 0}</span>
                     </span>
-                    <span className="flex items-center space-x-1">
-                      <ChatBubbleOvalLeftIcon className="h-5 w-5" />
-                      <span>{post.comments?.length || 0}</span>
-                    </span>
-                    <span className="flex items-center space-x-1">
-                      <ShareIcon className="h-5 w-5" />
-                      <span>{post.shares || 0}</span>
-                    </span>
                   </div>
                   <span className="flex items-center space-x-1">
-                    <CurrencyDollarIcon className="h-5 w-5" />
-                    <span>{post.entry === 'paid' ? 'Paid' : 'Free'}</span>
+                    {/* <CurrencyDollarIcon className="h-5 w-5" /> */}
+                    <span>{post.isFree ? 'Free' : `₹${post.price}`}</span>
                   </span>
                 </div>
 
-                <h2 className="font-bold text-lg">{post.title}</h2>
+                <h2 
+                  className="font-bold text-lg cursor-pointer"
+                  onClick={() => handleEventClick(post._id)}
+                >{post.name}</h2>
                 <p className="text-gray-600">{post.description}</p>
+                <p className="text-sm text-gray-500">
+                  {new Date(post.date).toLocaleDateString()} at {post.time}
+                </p>
               </div>
             </div>
           ))}

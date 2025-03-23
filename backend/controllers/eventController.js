@@ -1,4 +1,5 @@
 
+import { log } from 'console';
 import Event from '../models/Event.js';
 import cloudinary from '../utils/cloudinary.js';
 
@@ -94,6 +95,7 @@ export const createEvent = async (req, res) => {
 export const getEvents = async (req, res) => {
   try {
     const events = await Event.find().sort({ createdAt: -1 });
+    // console.log("events",events);
     
     res.status(200).json({
       success: true,
@@ -163,18 +165,24 @@ export const toggleLike = async (req, res) => {
 
 export const getTopLikedEvents = async (req, res) => {
   try {
+    // console.log('Starting to fetch top events');
+    
     const topEvents = await Event.find()
-      .sort({ likeCount: -1 }) 
-      .limit(3); 
+      .sort({ likeCount: -1 })
+      .limit(3);
+
+    // console.log('Found events:', topEvents);
 
     res.status(200).json({
       success: true,
       data: topEvents
     });
   } catch (error) {
+    console.log('Detailed error:', error);
     res.status(500).json({
       success: false,
-      message: error.message
+      message: error.message,
+      stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
     });
   }
 };
@@ -259,3 +267,39 @@ export const getLikeStatus = async (req, res) => {
 };
 
 
+export const getEventById = async (req, res) => {
+  try {
+      const event = await Event.findById(req.params.id);
+      if (!event) {
+          return res.status(404).json({ message: 'Event not found' });
+      }
+      res.json(event);
+  } catch (error) {
+      res.status(500).json({ message: 'Server error' });
+  }
+};
+
+//Student register 
+export const registerForEvent = async (req, res) => {
+  try {
+    
+    const {eventId,  leader, teamName, teamMembers } = req.body;
+    // console.log("body",req.body);
+    
+
+    if (!leader.name || !leader.email || !teamName) {
+      return res.status(400).json({ success: false, message: "Missing required fields" });
+    }
+
+    const event = await Event.findById(eventId);
+    if (!event) return res.status(404).json({ success: false, message: "Event not found" });
+
+    event.registrations.push({ leader, teamName, teamMembers });
+    event.save();
+    res.status(201).json({ success: true, message: "Registered successfully" });
+  } catch (error) {
+    console.log("error",error);
+    
+    res.status(500).json({ success: false, message: error.message });
+  }
+};

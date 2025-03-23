@@ -51,11 +51,15 @@ const [formData, setFormData] = useState({
       setFormData({
         name: '',
         institution: '',
+        venue:'',
         date: '',
         time: '',
         isFree: true,
         price: 0,
-        description: ''
+        description: '',
+        clubName: '', 
+        performer: '', 
+
       });
       setImages([]);
       setPreviewImages([]);
@@ -256,7 +260,7 @@ const [formData, setFormData] = useState({
             {!formData.isFree && (
               <div>
                 <label htmlFor="price" className="block text-sm font-medium text-gray-700 mb-1">
-                  Price (in $) *
+                  Price (in ₹) *
                 </label>
                 <input
                   type="number"
