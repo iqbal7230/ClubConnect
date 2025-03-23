@@ -15,12 +15,11 @@ import EventForm from './pages/EventForm';
 import LandingPost from './pages/LandingPost';
 import EventDetails from './pages/EventDetails';
 import TrendingPage from './pages/TrendingPage';
-import StudentRegisterPage from './pages/StudentRegistrationPage';
+import StudentRegisterPage from './pages/StudentRegisterPage';
 import AllEvents from './pages/AllEvents';
 import EventAttendees from './pages/EventAttendees';
-import EventSponsors from './pages/EventSponsers';
+import EventSponsors from './pages/EventSponsors';
 import SponsorForm from './pages/SponsorForm';
-import UserProfile from './pages/UserProfile';
 
 // import ChatRoom from './pages/ChatRoom';
 
@@ -38,7 +37,7 @@ function App() {
          
           {/* <Route path="/profile/:id" element={<ProfilePage />} /> */}
           
-          {/* <Route path="/register" element={</>} /> */}
+          <Route path="/register" element={<Register />} />
           <Route path="/chat" element={<ChatRoom/>} />
          
           

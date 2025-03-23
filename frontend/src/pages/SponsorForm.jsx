@@ -48,11 +48,11 @@ const SponsorForm = () => {
     <div className="max-w-lg mx-auto p-6 bg-white rounded-lg shadow-md">
       <h1 className="text-2xl font-bold mb-6">Sponsor This Event</h1>
       
-      {error && (
+      {/* {error && (
         <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
           {error}
         </div>
-      )}
+      )} */}
       
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>

@@ -1,10 +1,10 @@
 const ChatSuggestions = ({ onSelect }) => {
     const suggestions = [
-      "How to create a budget for a campus event?",
-      "Best ways to promote a university club event?",
-      "What's a good timeline for planning a workshop?",
+      "List the topic of top 3 events this week",
+      "which is event is good for coder",
+      "What are the upcoming events?",
       "How to handle event registrations efficiently?",
-      "Tips for engaging students during events?",
+      "Apart from event,Tips for engaging students during events?",
       "What safety measures should we consider?",
     ];
   

@@ -95,7 +95,7 @@ export const createEvent = async (req, res) => {
 export const getEvents = async (req, res) => {
   try {
     const events = await Event.find().sort({ createdAt: -1 });
-    console.log("events",events);
+    // console.log("events",events);
     
     res.status(200).json({
       success: true,
@@ -165,13 +165,13 @@ export const toggleLike = async (req, res) => {
 
 export const getTopLikedEvents = async (req, res) => {
   try {
-    console.log('Starting to fetch top events');
+    // console.log('Starting to fetch top events');
     
     const topEvents = await Event.find()
       .sort({ likeCount: -1 })
       .limit(3);
 
-    console.log('Found events:', topEvents);
+    // console.log('Found events:', topEvents);
 
     res.status(200).json({
       success: true,
@@ -284,7 +284,7 @@ export const registerForEvent = async (req, res) => {
   try {
     
     const {eventId,  leader, teamName, teamMembers } = req.body;
-    console.log("body",req.body);
+    // console.log("body",req.body);
     
 
     if (!leader.name || !leader.email || !teamName) {

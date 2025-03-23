@@ -20,15 +20,14 @@ app.use(express.json());
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/events', EventRouter);
 
-// app.use((err, req, res, next) => {
-//   console.error(err.stack);
-//   res.status(500).json({ 
-//     success: false, 
-//     message: 'Something went wrong!',
-//     error: err.message 
-//   });
-// });
-
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ 
+    success: false, 
+    message: 'Something went wrong!',
+    error: err.message 
+  });
+});
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

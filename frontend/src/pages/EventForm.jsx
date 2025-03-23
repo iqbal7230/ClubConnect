@@ -5,7 +5,7 @@ const EventForm = () => {
   const [formData, setFormData] = useState({
     name: '',
     institution: '',
-    venue: '',
+    venue:'',
     date: '',
     time: '',
     isFree: true,
@@ -54,14 +54,15 @@ const EventForm = () => {
       setFormData({
         name: '',
         institution: '',
-        venue: '',
+        venue:'',
         date: '',
         time: '',
         isFree: true,
         price: 0,
         description: '',
-        clubName: '',
-        performer: '',
+        clubName: '', 
+        performer: '', 
+
       });
       setImages([]);
       setPreviewImages([]);
@@ -143,6 +144,8 @@ const EventForm = () => {
               placeholder="Enter event name"
             />
           </div>
+         
+
 
           {/* Club Name */}
           <div className="md:col-span-2">
@@ -194,10 +197,10 @@ const EventForm = () => {
             />
           </div>
 
-          {/* Venue */}
-          <div>
-            <label htmlFor="venue" className="block text-sm font-medium text-gray-700 mb-1">
-              Venue *
+           {/* venue*/}
+           <div>
+            <label htmlFor="institution" className="block text-sm font-medium text-gray-700 mb-1">
+             venue *
             </label>
             <input
               type="text"
@@ -205,12 +208,12 @@ const EventForm = () => {
               name="venue"
               value={formData.venue}
               onChange={handleChange}
-              required
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Enter event venue"
+              placeholder="Enter institution name"
             />
           </div>
 
+          
           {/* Date */}
           <div>
             <label htmlFor="date" className="block text-sm font-medium text-gray-700 mb-1">
@@ -262,7 +265,7 @@ const EventForm = () => {
             {!formData.isFree && (
               <div>
                 <label htmlFor="price" className="block text-sm font-medium text-gray-700 mb-1">
-                  Price (in $) *
+                  Price (in ₹) *
                 </label>
                 <input
                   type="number"

@@ -10,5 +10,10 @@
     "react-tsparticles": "^2.12.2",
     "socket.io-client": "^4.8.1",
     "tsparticles": "^3.8.1"
+    "socket.io-client": "^4.8.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.26.9",
+    "@babel/preset-react": "^7.26.3"
   }
 }

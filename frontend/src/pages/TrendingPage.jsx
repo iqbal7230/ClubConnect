@@ -27,6 +27,7 @@ const TrendingPage = () => {
   const handleEventClick = (eventId) => {
     navigate(`/event/${eventId}`);
   };
+  let likeCount = topPosts.reduce((count, post) => count + (likedPosts[post._id] ? 1 : 0), 0);
 
   useEffect(() => {
     const fetchTopPosts = async () => {
@@ -62,6 +63,7 @@ const TrendingPage = () => {
   }, []);
 
   const handleLike = async (postId) => {
+    
     if (!currentUser) {
       navigate('/login');
       return;
@@ -148,7 +150,9 @@ const TrendingPage = () => {
                 </>
               )}
             </div>
-            
+            <div className="flex items-center space-x-4 px-1.5">
+          <Link to="/chat" className="px-4 py-2 bg-indigo-600 text-white rounded-lg shadow-md hover:bg-indigo-700 transition transform hover:scale-105">Ask to AI</Link>
+        </div>
           </div>
         </div>
       </nav>
@@ -223,11 +227,11 @@ const TrendingPage = () => {
                   <div className="flex items-center space-x-4">
                     <span className="flex items-center space-x-1">
                       <HeartIcon className="h-5 w-5" />
-                      <span>{post.likes?.length || 0}</span>
+                      <span>{post.likeCount || 0}</span>
                     </span>
                   </div>
                   <span className="flex items-center space-x-1">
-                    <CurrencyDollarIcon className="h-5 w-5" />
+                    {/* <CurrencyDollarIcon className="h-5 w-5" /> */}
                     <span>{post.isFree ? 'Free' : `₹${post.price}`}</span>
                   </span>
                 </div>

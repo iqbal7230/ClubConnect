@@ -8,7 +8,7 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 // Fetch all events without filtering
 export const fetchEvents = async () => {
   try {
-    const response = await axios.get(`${API_BASE_URL}/events/getEvent`);
+    const response = await axios.get(`${API_BASE_URL}/events/all/top-events`);
     console.log("Fetched Data:", response.data);
     return response.data;
   } catch (error) {
@@ -28,7 +28,7 @@ export const generateResponse = async (prompt) => {
       2. Be concise and factual
       3. Format lists with bullet points
       4. Highlight free events
-      5. If no matching events, say "No matching events found"
+    
       
       Event Data: ${JSON.stringify(events)}
       

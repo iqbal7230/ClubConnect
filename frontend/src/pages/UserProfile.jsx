@@ -5,7 +5,6 @@ import BasicInfo from "../components/UserProfile/BasicInfo";
 import AboutSection from "../components/UserProfile/AboutSection";
 import ActivityStats from "../components/UserProfile/ActivityStatus";
 import StudentEvents from "../components/UserProfile/StudentEvents";
-// import ClubAdminEvents from "../components/UserProfile/ClubAdminEvents";
 import ClubAdminEvents from "../components/UserProfile/ClubAdminEvents";
 import SponsorshipHistory from "../components/UserProfile/SponsorshipHistory";
 

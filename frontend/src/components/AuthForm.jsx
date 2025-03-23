@@ -16,12 +16,8 @@ export default function AuthForm({ type }) {
       } else {
         await register(formData.name, formData.email, formData.password, formData.role);
       }
-<<<<<<< HEAD
       navigate('/all-events');
       // navigate('/dashboard');
-=======
-      navigate("/dashboard");
->>>>>>> 6b1d6965ce3bebbf7b74f6d3c52be0d04f5bb6f6
     } catch (err) {
       setError(err.response?.data?.msg || "Something went wrong");
     }
